@@ -19,7 +19,7 @@ typedef struct
 	uint8_t data[10];
 }interTaskMsg_t;
 
-//semaphore declared 
+//semaphore/queue declared 
 extern SemaphoreHandle_t UART_IO_Sem;
 
 #endif 
