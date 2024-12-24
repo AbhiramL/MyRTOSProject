@@ -145,7 +145,7 @@
 // <i> Data order of the data bits in the frame
 // <id> usart_arch_dord
 #ifndef CONF_SERCOM_0_USART_DORD
-#define CONF_SERCOM_0_USART_DORD 0
+#define CONF_SERCOM_0_USART_DORD 1
 #endif
 
 // Does not do anything in UART mode
