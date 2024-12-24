@@ -1,29 +1,24 @@
 //start of A1 task
 #include "common.h"
 #include "A1Task.h"
-
+#include "SerialTask.h"
 
 static interTaskMsg_t A1Taskmsg;
 struct io_descriptor *ioA1;
 
-
 void A1_task(void *p)
 {
 	//(void)p;
-
-			usart_async_get_io_descriptor(&USART_0, &ioA1);
-			usart_async_enable(&USART_0);
-
-	
 	while(1)
 	{
 		if(xSemaphoreTake(UART_IO_Sem, 0))
 		{
-			//send queue message
+			//make queue message
+			A1Taskmsg.Id = 1;
+			memcpy(A1Taskmsg.data, "Hello1\n\r", 10);
 			
-			memcpy(A1Taskmsg.data, "A1 Task\n", 10);
-			
-			io_write(ioA1, (uint8_t*)A1Taskmsg.data, sizeof(A1Taskmsg.data));
+			//write to queue
+			ST_SendMsg(&A1Taskmsg);
 
 			os_sleep(500);
 						
@@ -37,7 +32,5 @@ void A1_task(void *p)
 			os_sleep(500);
 			
 		}
-		
-	}
-	
+	}//end while
 }
