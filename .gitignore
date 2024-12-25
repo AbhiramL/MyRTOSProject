@@ -1,9 +1,9 @@
 
 /MyRTOSproject/.project-backup
 /MyRTOSproject/Debug
+/MyRTOSproject/Release
 MyRTOSproject/jlink.1.log
 *.log
 /.vs
 /.vs/MyRTOSproject/v14
-.vs/MyRTOSproject/v14/.atsuo
 .vs/MyRTOSproject/v14/.atsuo

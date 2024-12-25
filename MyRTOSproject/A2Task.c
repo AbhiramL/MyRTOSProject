@@ -10,7 +10,7 @@
 static SemaphoreHandle_t sem;
 static QueueHandle_t Queue;
 static TimerHandle_t Wake_Timer;
-static interTaskMsg_t A2Taskmsg, incomingMsg;
+static interTaskMsg_t incomingMsg;
 
 //local function prototypes
 static void A2_Timer_Timeout(TimerHandle_t xTimer);
@@ -32,21 +32,21 @@ void A2_task(void *p)
 	
 	while((xQueueReceive(Queue, &incomingMsg, portMAX_DELAY))) //portMAX_DELAY as last param means this will wait without timing out
 	{
-		A2Taskmsg.Id = 2;
-		memcpy(A2Taskmsg.data, "Hello2\n\r", 10);
-		
 		//write to queue
-		ST_SendMsg(&A2Taskmsg);		
+		ST_SendMsg(&incomingMsg);		
 					
 	}//end while
 }
 
 static void A2_Timer_Timeout(TimerHandle_t xTimer)
 {
+	interTaskMsg_t A2Taskmsg;
+	
 	if( xTimer == Wake_Timer)
 	{
+		
 		//prepare a message
-		A2Taskmsg.Id = 0;
+		A2Taskmsg.Id = 2;
 		memcpy(A2Taskmsg.data, "A2 Timeout", 11);
 		
 		//post it to A1 task queue
