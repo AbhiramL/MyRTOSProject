@@ -2,19 +2,22 @@
 #include<string.h>
 #include "SerialTask.h"
 
-QueueHandle_t serial_queue;
-struct io_descriptor *ioSer;
-
+static SemaphoreHandle_t SerialTask_Sem;
+static QueueHandle_t Queue;
+struct io_descriptor *ioSer; //for serial uart port writing
 static interTaskMsg_t SerTaskmsg;
 
 void SER_Task(void *p)
 {
 	//(void)p;
 	//Init
-	serial_queue = xQueueCreate(10, sizeof(interTaskMsg_t));
+	Queue = xQueueCreate(10, sizeof(interTaskMsg_t));	
+	SerialTask_Sem = xSemaphoreCreateMutex();
+
 	ioSer = NULL;
 	
-	while(xQueueReceive(serial_queue, &SerTaskmsg, portMAX_DELAY))
+	//loop
+	while(xQueueReceive(Queue, &SerTaskmsg, portMAX_DELAY))
 	{
 		usart_async_get_io_descriptor(&USART_0, &ioSer);
 		usart_async_enable(&USART_0);
@@ -37,16 +40,22 @@ void SER_Task(void *p)
 				//io_write(ioSer, (uint8_t*)SerTaskmsg.data, strlen((const char *)SerTaskmsg.data));
 				break;	
 		}//end switch
-			
-		//then, sleep.
-		os_sleep(500);
+
 		
 	}//end while
 		
 }
 
-void ST_SendMsg(interTaskMsg_t* SerTaskmsg)
+void ST_SendMsg(interTaskMsg_t* SerTaskmsg) //no static, we want A1 and A2 to call this
 {
-	//write to serial task queue
-	xQueueSendToBack(serial_queue, SerTaskmsg, 0);
+	//get semaphore
+	if(xSemaphoreTake(SerialTask_Sem, portMAX_DELAY))
+	{
+		//write to serial task queue
+		xQueueSendToBack(Queue, SerTaskmsg, 0);
+		
+		xSemaphoreGive(SerialTask_Sem);
+		
+	}
+	
 }

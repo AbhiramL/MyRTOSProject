@@ -47,7 +47,7 @@ void assert_triggered(const char *file, uint32_t line);
 // <i> Default: 2400
 // <id> freertos_total_heap_size
 #ifndef configTOTAL_HEAP_SIZE
-#define configTOTAL_HEAP_SIZE ((size_t)(5120))
+#define configTOTAL_HEAP_SIZE ((size_t)(10*1024))
 #endif
 
 // <q> Enable mutex
@@ -185,7 +185,7 @@ void assert_triggered(const char *file, uint32_t line);
 #define configTIMER_TASK_PRIORITY (2)
 #endif
 
-#define configTIMER_QUEUE_LENGTH 2
+#define configTIMER_QUEUE_LENGTH 6
 
 // <o> Timer task stack size <32-512:4>
 // <i> Default is 64

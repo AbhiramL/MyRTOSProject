@@ -10,13 +10,13 @@
 #include "utils.h"
 #include "rtos_port.h"
 #include "semphr.h"
-
-#include <string.h>
+#include "timers.h"
+#include<string.h>
 
 typedef struct
 {
 	uint8_t Id;
-	uint8_t data[10];
+	uint8_t data[15];
 }interTaskMsg_t;
 
 //semaphore/queue declared 

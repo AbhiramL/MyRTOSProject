@@ -12,16 +12,12 @@
 #define SER_TASK_PRIORITY (A2_TASK_PRIORITY + 1)
 
 static TaskHandle_t      xA1Task, xA2Task, xSerTask;
-SemaphoreHandle_t UART_IO_Sem;
 
 int main(void)
 {
 	/* Initializes MCU, drivers and middleware */
 	atmel_start_init();
 
-	//create a UART syncing semaphore.
-	UART_IO_Sem = xSemaphoreCreateMutex();
-	
 	xTaskCreate(A1_task, "A1", TASK_STACK_SIZE, NULL, A1_TASK_PRIORITY, xA1Task);
 	xTaskCreate(A2_task, "A2", TASK_STACK_SIZE, NULL, A2_TASK_PRIORITY, xA2Task);
 	xTaskCreate(SER_Task, "SERIAL", TASK_STACK_SIZE, NULL, SER_TASK_PRIORITY, xSerTask);
